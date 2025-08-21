@@ -8,7 +8,7 @@ from logging.handlers import RotatingFileHandler
 import threading
 import time
 from datetime import datetime
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
@@ -64,7 +64,11 @@ def create_app(config_name=None):
     os.makedirs(app.config["ANNOTATIONS_FOLDER"], exist_ok=True)
 
     # Initialize CORS
-    CORS(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}})
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}},
+        supports_credentials=True,
+    )
 
     # Initialize database
     db.init_app(app)
@@ -108,6 +112,36 @@ def create_app(config_name=None):
     from .api import api_bp
 
     app.register_blueprint(api_bp)
+
+    # Serve frontend files (for development and testing)
+    @app.route("/app")
+    @app.route("/app/<path:path>")
+    def serve_frontend(path=""):
+        """Serve the frontend application files."""
+        frontend_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "frontend"
+        )
+
+        if path == "":
+            return send_from_directory(frontend_dir, "index.html")
+
+        # Try to serve the requested file
+        if os.path.exists(os.path.join(frontend_dir, path)):
+            return send_from_directory(frontend_dir, path)
+
+        # If file doesn't exist, serve index.html (for SPA routing)
+        return send_from_directory(frontend_dir, "index.html")
+
+    # Serve frontend assets
+    @app.route("/assets/<path:path>")
+    def serve_frontend_assets(path):
+        """Serve the frontend assets."""
+        frontend_assets_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            "frontend",
+            "assets",
+        )
+        return send_from_directory(frontend_assets_dir, path)
 
     # Create database if it doesn't exist
     with app.app_context():
@@ -176,5 +210,19 @@ def create_app(config_name=None):
     def health_check():
         """Health check endpoint for the API."""
         return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+
+    @app.route("/")
+    def index():
+        """Root endpoint that serves the API documentation HTML page."""
+        return send_from_directory(os.path.join(app.root_path, "static"), "index.html")
+
+    @app.route("/favicon.ico")
+    def favicon():
+        """Serve the favicon."""
+        return send_from_directory(
+            os.path.join(app.root_path, "static"),
+            "favicon.ico",
+            mimetype="image/vnd.microsoft.icon",
+        )
 
     return app

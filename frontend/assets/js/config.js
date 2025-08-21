@@ -4,7 +4,7 @@
 export const config = {
   // API Configuration
   api: {
-    baseUrl: "http://localhost:5000/api/v1",
+    baseUrl: "http://127.0.0.1:5000/api/v1",
     timeout: 30000, // 30 seconds
     retryAttempts: 3,
     retryDelay: 1000, // 1 second

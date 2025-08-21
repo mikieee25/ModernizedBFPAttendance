@@ -23,6 +23,37 @@ class CustomApi(Api):
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 api = CustomApi(api_bp)
 
+
+# Add documentation endpoint for the API
+@api_bp.route("/")
+def api_documentation():
+    """Return documentation for the API."""
+    return {
+        "name": "BFP Sorsogon Attendance System API",
+        "version": "1.0.0",
+        "endpoints": {
+            "authentication": {
+                "/api/v1/auth/login": "POST - Authenticate and get access token",
+                "/api/v1/auth/logout": "POST - Invalidate current token",
+                "/api/v1/auth/refresh": "POST - Refresh access token",
+            },
+            "personnel": {
+                "/api/v1/personnel": "GET - List all personnel, POST - Create new personnel",
+                "/api/v1/personnel/<id>": "GET - Get personnel details, PUT - Update personnel, DELETE - Remove personnel",
+            },
+            "attendance": {
+                "/api/v1/attendance": "GET - Get today's attendance, POST - Record attendance",
+                "/api/v1/attendance/history": "GET - Get attendance history",
+                "/api/v1/attendance/pending": "GET - Get pending attendance, POST - Submit for approval",
+            },
+            "face_recognition": {
+                "/api/v1/face/recognize": "POST - Recognize face for attendance",
+                "/api/v1/face/register": "POST - Register face for personnel",
+            },
+        },
+    }
+
+
 # Register resources
 from .auth import LoginResource, LogoutResource, TokenRefreshResource
 from .personnel import PersonnelResource, PersonnelListResource
