@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BFP Sorsogon Attendance System</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
+
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Chart.js for Dashboards -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <div id="app" class="flex flex-col min-h-screen">
+      <!-- Navigation Component -->
+      <nav id="main-nav" class="bg-red-700 text-white shadow-md"></nav>
+
+      <!-- Main Content Area -->
+      <main
+        id="main-content"
+        class="flex-grow container mx-auto px-4 py-8"
+      ></main>
+
+      <!-- Footer Component -->
+      <footer id="main-footer" class="bg-gray-800 text-white py-6"></footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div
+      id="loading-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-700 mx-auto"
+        ></div>
+        <p class="mt-4 text-gray-700">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="assets/js/app.js" type="module"></script>
+  </body>
+</html>
